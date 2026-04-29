@@ -18,17 +18,16 @@ def execute_query(query, params=()):
         cursor.execute(query, params)
         return cursor.fetchall()
 
-def search_flights(origin, destination, date, flighttype):
+def get_flight_price(flighttype):
     pricing = FLIGHT_PRICING.get(flighttype)
-    
     if pricing is None:
         raise ValueError(f"Unknown flight type: '{flighttype}'")
-    
-    total_price = calculate_price(pricing["base"], pricing["tax_rate"], pricing["fee"])
-    
+    return calculate_price(pricing["base"], pricing["tax_rate"], pricing["fee"])
+
+def search_flights(origin, destination, date, flighttype):
+    total_price = get_flight_price(flighttype)
     print(f"Searching {flighttype} flights from {origin} to {destination} on {date}")
     print(f"Estimated ticket price: ${total_price:.2f}")
-    
     query = "SELECT * FROM flights WHERE origin=? AND dest=? AND date=? AND type=?"
     return execute_query(query, (origin, destination, date, flighttype))
 
