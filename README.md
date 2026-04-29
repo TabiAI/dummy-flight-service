@@ -1,0 +1,84 @@
+# Phase 1: Foundations & Intensity
+## Week 1, Day 3: Git & Refactoring
+
+> **The Execution Standard:** *"We do not train interns we build engineers."* Treat today's assignment as a production-level simulation. Engineering rigor and attention to detail are expected at every step.
+
+---
+
+### 📋 Background
+
+We have a legacy Python script (`flight_service.py`) that handles basic flight searches. While it is functional, it is plagued by technical debt and desperately needs refactoring before we can scale it.
+
+### 🎯 Your Task
+
+Your core deliverable today is to refactor this legacy codebase. You must focus your execution on two specific areas:
+
+1. **DRY Principles:** Thoroughly review the provided code and refactor it focusing on DRY (Don't Repeat Yourself) principles. Consolidate duplicate logic.
+2. **Version Control (Atomic Commits):** Your git history is just as important as your code. You are required to focus on using Atomic Commits to document your refactoring process. Do not submit one massive commit. Break your work down into logical, isolated commits (e.g., one commit for extracting DB logic, one for pricing logic, etc.).
+
+---
+
+### 🛠️ The Legacy Codebase (`flight_service.py`)
+
+```python
+import sqlite3
+
+# LEGACY CODE: DO NOT DEPLOY TO PRODUCTION
+# This script handles basic flight searches but desperately needs refactoring.
+
+def search_domestic_flights(origin, destination, date):
+    # Establish database connection
+    conn = sqlite3.connect('travelbase_legacy.db')
+    cursor = conn.cursor()
+    
+    # Calculate pricing
+    base_price = 150.00
+    tax = base_price * 0.08
+    airport_fee = 25.00
+    total_price = base_price + tax + airport_fee
+    
+    print(f"Searching domestic flights from {origin} to {destination} on {date}")
+    print(f"Estimated ticket price: ${total_price:.2f}")
+    
+    # Fetch from database
+    query = f"SELECT * FROM flights WHERE origin='{origin}' AND dest='{destination}' AND date='{date}' AND type='domestic'"
+    cursor.execute(query)
+    flights = cursor.fetchall()
+    
+    conn.close()
+    return flights
+
+def search_international_flights(origin, destination, date):
+    # Establish database connection
+    conn = sqlite3.connect('travelbase_legacy.db')
+    cursor = conn.cursor()
+    
+    # Calculate pricing
+    base_price = 450.00
+    tax = base_price * 0.15
+    airport_fee = 50.00
+    total_price = base_price + tax + airport_fee
+    
+    print(f"Searching international flights from {origin} to {destination} on {date}")
+    print(f"Estimated ticket price: ${total_price:.2f}")
+    
+    # Fetch from database
+    query = f"SELECT * FROM flights WHERE origin='{origin}' AND dest='{destination}' AND date='{date}' AND type='international'"
+    cursor.execute(query)
+    flights = cursor.fetchall()
+    
+    conn.close()
+    return flights
+
+def get_flight_by_id(flight_id):
+    # Establish database connection
+    conn = sqlite3.connect('travelbase_legacy.db')
+    cursor = conn.cursor()
+    
+    # Fetch from database
+    query = f"SELECT * FROM flights WHERE id='{flight_id}'"
+    cursor.execute(query)
+    flight = cursor.fetchone()
+    
+    conn.close()
+    return flight
