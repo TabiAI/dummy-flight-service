@@ -3,6 +3,17 @@ import sqlite3
 # LEGACY CODE: DO NOT DEPLOY TO PRODUCTION
 # This script handles basic flight searches but desperately needs refactoring.
 
+# Fixed Data
+PRICING = {
+    "domestic": {"base_price": 150.00, "tax_rate": 0.08, "airport_fee": 25.00},
+    "international": {"base_price": 450.00, "tax_rate": 0.15, "airport_fee": 50.00},
+}
+
+# Helper Functions
+def calculate_price(base_price, tax_rate, airport_fee):
+    tax = base_price * tax_rate
+    return base_price + tax + airport_fee
+
 def search_domestic_flights(origin, destination, date):
     # Establish database connection
     conn = sqlite3.connect('travelbase_legacy.db')
