@@ -3,16 +3,17 @@ import sqlite3
 # LEGACY CODE: DO NOT DEPLOY TO PRODUCTION
 # This script handles basic flight searches but desperately needs refactoring.
 
+def calculate_price(base_price,tax_rate,airport_fee):
+    total_price = base_price + (base_price*tax_rate) + airport_fee
+    return total_price
+
 def search_domestic_flights(origin, destination, date):
     # Establish database connection
     conn = sqlite3.connect('travelbase_legacy.db')
     cursor = conn.cursor()
     
     # Calculate pricing
-    base_price = 150.00
-    tax = base_price * 0.08
-    airport_fee = 25.00
-    total_price = base_price + tax + airport_fee
+    total_price = calculate_price(450.00,0.08,50.00)
     
     print(f"Searching domestic flights from {origin} to {destination} on {date}")
     print(f"Estimated ticket price: ${total_price:.2f}")
@@ -31,10 +32,7 @@ def search_international_flights(origin, destination, date):
     cursor = conn.cursor()
     
     # Calculate pricing
-    base_price = 450.00
-    tax = base_price * 0.15
-    airport_fee = 50.00
-    total_price = base_price + tax + airport_fee
+    total_price = calculate_price(450.00,0.15,50.00)
     
     print(f"Searching international flights from {origin} to {destination} on {date}")
     print(f"Estimated ticket price: ${total_price:.2f}")
