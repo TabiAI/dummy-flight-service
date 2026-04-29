@@ -33,14 +33,6 @@ def search_flights(origin, destination, date, flighttype):
     return execute_query(query, (origin, destination, date, flighttype))
 
 def get_flight_by_id(flight_id):
-    # Establish database connection
-    conn = sqlite3.connect('travelbase_legacy.db')
-    cursor = conn.cursor()
-    
-    # Fetch from database
-    query = f"SELECT * FROM flights WHERE id='{flight_id}'"
-    cursor.execute(query)
-    flight = cursor.fetchone()
-    
-    conn.close()
-    return flight
+    query = "SELECT * FROM flights WHERE id=?"
+    results = execute_query(query, (flight_id,))
+    return results[0] if results else None
